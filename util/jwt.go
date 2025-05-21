@@ -8,9 +8,9 @@ import (
 )
 
 // GenerateJWT generate jwt
-func GenerateJWT(secret string, duration int64, data map[string]interface{}) (string, error) {
+func GenerateJWT(secret string, duration time.Duration, data map[string]interface{}) (string, error) {
 	claims := jwt.MapClaims{
-		"exp": time.Now().Add(time.Duration(duration)).Unix(),
+		"exp": time.Now().Add(duration).Unix(),
 	}
 	for key, value := range data {
 		claims[key] = value
