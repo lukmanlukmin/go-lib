@@ -8,6 +8,7 @@ require (
 	github.com/go-redis/redis/extra/redisotel v0.3.0
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-sql-driver/mysql v1.9.2
+	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/hashicorp/golang-lru v1.0.2
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/lib/pq v1.10.9
