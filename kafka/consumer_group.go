@@ -5,10 +5,7 @@ package kafka
 import (
 	"context"
 	"fmt"
-	"os"
-	"os/signal"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/IBM/sarama"
@@ -156,13 +153,8 @@ func (k *consumerGroup) Subscribe(ctx *ConsumerContext) {
 	lf["state"] = logStateNameStarting
 	log.WithFields(lf).Info(fmt.Sprintf("consumer group up and running!... group %s, queue %v", ctx.Context, ctx.Topics))
 
-	sigterm := make(chan os.Signal, 1)
-	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
-
-	<-sigterm // Await a sigterm signal before safely closing the consumer
-
+	<-ctx.Context.Done()
 	cancel()
 	lf["state"] = logStateNameTerminated
-	log.WithFields(lf).Info("Cancelled message without marking offsets")
-
+	log.WithFields(lf).Info("Shutdown signal received via context cancel")
 }

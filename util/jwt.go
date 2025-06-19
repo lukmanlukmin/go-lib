@@ -42,5 +42,5 @@ func ValidateJWT(secret, tokenString string) (map[string]interface{}, error) {
 		return result, nil
 	}
 
-	return nil, fmt.Errorf("invalid token")
+	return nil, fmt.Errorf("invalid or expired token")
 }
