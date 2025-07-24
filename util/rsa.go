@@ -62,13 +62,22 @@ func DecodeHexRSAKeyString(privateKey string, pubKeystring string) ([]byte, []by
 }
 
 // PubKeyToJWKKey ...
-func PubKeyToJWKKey(pub *rsa.PublicKey) jwk.Key {
+func PubKeyToJWKKey(pub *rsa.PublicKey, kid string) jwk.Key {
 	key, err := jwk.New(pub)
 	if err != nil {
 		log.Fatal(err)
 	}
-	if err := key.Set(jwk.KeyUsageKey, "enc"); err != nil {
-		log.Fatal(fmt.Errorf("failed to set key usage: %w", err))
+	if kid != "" {
+		if err := key.Set(jwk.KeyUsageKey, "sig"); err != nil {
+			log.Fatal(fmt.Errorf("failed to set key usage: %w", err))
+		}
+		if err := key.Set(jwk.KeyIDKey, kid); err != nil {
+			log.Fatal(fmt.Errorf("failed to set key usage: %w", err))
+		}
+	} else {
+		if err := key.Set(jwk.KeyUsageKey, "sig"); err != nil {
+			log.Fatal(fmt.Errorf("failed to set key usage: %w", err))
+		}
 	}
 	if err := key.Set(jwk.AlgorithmKey, "RS256"); err != nil {
 		log.Fatal(fmt.Errorf("failed to set key algorithm: %w", err))
