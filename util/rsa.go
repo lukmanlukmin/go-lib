@@ -25,6 +25,21 @@ func ParsePubKeyFromString(pubKey string) *rsa.PublicKey {
 	return pubAsli.(*rsa.PublicKey)
 }
 
+// ParseRSAPrivateKeyFromHex ...
+func ParseRSAPrivateKeyFromHex(hexStr string) (*rsa.PrivateKey, error) {
+	privBytes, err := hex.DecodeString(hexStr)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode hex private key: %w", err)
+	}
+
+	privKey, err := x509.ParsePKCS1PrivateKey(privBytes)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse private key: %w", err)
+	}
+
+	return privKey, nil
+}
+
 // GenerateRSAKeyString ...
 func GenerateRSAKeyString() (string, string) {
 	priv, err := rsa.GenerateKey(rand.Reader, 2048)
